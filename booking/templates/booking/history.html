@@ -1,0 +1,39 @@
+{% extends "booking/layout.html" %}
+
+{% block title %}
+    history
+{% endblock %}
+
+{% block main %}
+{% if not orders %}
+<p class="font2 add-para1">No History to show..</p>
+<br><br>
+{% else %}
+    <div class="container">
+            <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-8">
+  <p class="font2 add-para1">History</p>
+  <hr>
+  <table class="container">
+    <thead>
+        <tr>
+            <th><label for="sel1" class="font2 add-para2">user</label></th>
+            <th><label for="sel1" class="font2 add-para2">order no.</label></th>
+            <th><label for="sel1" class="font2 add-para2">price</label></th>
+        </tr>
+    </thead>
+    {% for order in orders %}
+        <tr class="para4 font1">
+          <th>{{ order.user_id }}</th>
+          <th>{{ order.order_number }}</th>
+          <th>{{ order.total_price }}</th>
+        </tr>
+    {% endfor %}  
+    </table>
+    <br><br>
+    <br><br>
+</div>
+</div>
+</div>
+{% endif %}
+{% endblock %}

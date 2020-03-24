@@ -1,0 +1,70 @@
+{% extends "booking/layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+<div class="container">
+            <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-8">
+  <p class="font2 add-para1">Register new user</p>
+  <form action="{% url 'register' %}" method="post">
+  {% csrf_token %}
+    <div class="form-group">
+      <label for="sel1" class="font2 add-para2">user name</label>
+      <input autocomplete="off" autofocus class="form-control font1" name="username" placeholder="Username" type="text"  id="user">
+      <br>
+        <label for="sel1" class="font2 add-para2">password</label>
+      <input class="form-control font1" name="password" placeholder="Password" type="password" id="password">
+        <br>
+        <label for="sel1" class="font2 add-para2">First name</label>
+       <input autocomplete="off" autofocus class="form-control font1" name="firstname" placeholder="first name" type="text"  id="first">
+        <br>
+       <label for="sel1" class="font2 add-para2">Last name</label>
+       <input autocomplete="off" autofocus class="form-control font1" name="lastname" placeholder="last name" type="text"  id="last">
+       <br>
+       <label for="sel1" class="font2 add-para2">Email Adress</label>
+       <input autocomplete="off" autofocus class="form-control font1" name="email" placeholder="Email Adress" type="text"  id="email">
+      <hr>
+      <div class="font1">
+          <button  type="submit" class="btn-md new-botton1 new-botton2"> Register</button>
+      </div>
+      </div>
+    </form>
+</div>
+</div>
+</div>
+
+<script>
+    document.querySelector('form').onsubmit = function()
+    {
+        if (!document.querySelector('#user').value)
+        {
+            alert('username is empty');
+            return false;
+        }
+        else if (!document.querySelector('#password').value)
+        {
+            alert('password is empty');
+            return false;
+        }
+        else if (!document.querySelector('#first').value)
+        {
+            alert('first name is empty');
+            return false;
+        }
+        else if (!document.querySelector('#last').value)
+        {
+            alert('last name is empty');
+            return false;
+        }
+        else if (!document.querySelector('#email').value)
+        {
+            alert('email is empty');
+            return false;
+        }
+    }
+    </script>
+
+{% endblock %}

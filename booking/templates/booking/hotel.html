@@ -1,0 +1,197 @@
+{% extends "booking/layout.html" %}
+
+{% block title %}
+    Hotel
+{% endblock %}
+
+{% block main %}
+
+<p class="para1 text-center font2">{{ hotel.name }}</p>
+
+
+
+<div id="googleMap" style="width:100%;height:400px;"></div>
+
+<section class="container">
+
+    <p class="font2 add-para1 msg" id = "msg"></p>
+    <br>
+    <label for="sel1" >From</label>
+    <input type="date" id="from" name="from" class="form-control" form = "myform" required>
+    <br>
+    <label for="sel1">To</label>
+    <input type="date" id="to" name="to" class="form-control" form = "myform" required>
+
+</section>
+
+{% for unit in units %}
+<section class="container">
+            <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <p class="para3 font2"> {{ unit.name }}</p>
+                        <p class="para4 font1"> {{ unit.desc }}</p>
+                        <p class="para4 font1"> the price is {{ unit.price }} per day</p>
+                        <form action="{% url 'book' %}" id ="myform" class="myformClass" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-md new-botton1 new-botton2" roomid ="{{unit.id}}"> book room</button>
+                        </form>
+                </div>
+                <div class="col-md-6 col-ms-6 col-xs-6">
+                <img src={{ unit.pic.url }} class="img-responsive villa-image1 image-effect1">
+                </div>
+            </div>
+        </section>
+        <hr>
+{% endfor %}
+
+<div class="container">
+            <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-8">
+  <p class="font2 add-para1">Reviews</p>
+  <hr>
+  <table class="container" id ="comments">
+    <thead>
+        <tr>
+            <th><label for="sel1" class="font2 add-para2">users</label></th>
+            <th><label for="sel1" class="font2 add-para2">Comments</label></th>
+            <th><label for="sel1" class="font2 add-para2">Rates</label></th>
+        </tr>
+    </thead>
+    {% for review in reviews %}
+        <tr class="para4 font1">
+          <th>{{ review.user_id }}</th>
+          <th>{{ review.comment }}</th>
+          <th>{{ review.rate }}</th>
+        </tr>
+    {% endfor %}    
+</table>
+<br><br>
+  <form id = "bisi" action="{% url 'hotel' hotel.id %}" method="post">
+  {% csrf_token %}
+    <div class="form-group">
+      <input autocomplete="off"  class="form-control font1" name="comment" placeholder="Enter your comment here.." type="text" id="comment">
+      <br>
+      <select class="form-control" id="rate" name="rate">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+  </select>
+      <br>
+      <div class="font1">
+          <button  type="submit" class="btn-md new-botton1 new-botton2"> Add</button>
+      </div>
+      </div>
+    </form>
+    <br>
+</div>
+</div>
+</div>
+
+<script>
+
+$(document).ready(function() {
+   $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyAioVs4ggwEohxKxhV_faKtzV8y00Cn1fM&callback=myMap');
+});
+
+function myMap() {
+    var mapProp= {
+      center:new google.maps.LatLng("{{ hotel.lat }}", "{{ hotel.longtude }}"),
+      zoom:15,
+    };
+    var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    var marker = new google.maps.Marker({
+    position: {lat:parseFloat("{{hotel.lat}}"),lng:parseFloat("{{hotel.longtude}}")},
+    map: map,
+    title: 'Hello World!'
+  });
+  }
+  
+
+$(".myformClass").submit(function( event ) {
+  
+  // Stop form from submitting normally
+  event.preventDefault();
+
+  // Get some values from elements on the page:
+  var $form = $( this ),
+    csrf_token = $form.find( "input[name='csrfmiddlewaretoken']" ).val(),
+    url = $form.attr( "action" );
+
+    let from = $('#from').val();
+    let to = $('#to').val();
+    let room_id = $(document.activeElement).attr("roomid");
+
+    if (to <= from){
+        alert("Start date should be less than end date");
+        return false;
+    }
+    
+    console.log($(document.activeElement).attr("roomid"))
+    console.log(url)
+    console.log(from)
+    console.log(to)
+    console.log(room_id)
+
+  // Send the data using post
+
+  var posting = $.post( url, { from: from, to: to, room_id: room_id,  csrfmiddlewaretoken: csrf_token } );
+  posting.success(data => { 
+     $('#msg').html("you booked the room successfully").fadeIn('slow') //also show a success message 
+     setTimeout(() => {
+        $('#msg').html("").fadeOut('slow') //also show a success message 
+     }, 1000)
+  });
+
+    posting.fail(data => { 
+     $('#msg').attr('class', 'font2 add-para1 msgError').html("Something Went Wrong!").fadeIn('slow') //also show a success message 
+     setTimeout(() => {
+        $('#msg').html("").fadeOut('slow').attr('class', 'font2 add-para1 msg') //also show a success message 
+     }, 1000)
+  });
+
+});
+
+$( "#bisi" ).submit(function( event ) {
+  
+  // Stop form from submitting normally
+  event.preventDefault();
+
+  // Get some values from elements on the page:
+  var $form = $( this ),
+    comment = $form.find( "input[name='comment']" ).val(),
+    csrf_token = $form.find( "input[name='csrfmiddlewaretoken']" ).val(),
+    url = $form.attr( "action" );
+    var rate = $('#rate').find(":selected").text();
+
+    console.log(url)
+    console.log(comment)
+    console.log(rate)
+
+  // Send the data using post
+
+  var posting = $.post( url, { comment: comment, rate: rate, csrfmiddlewaretoken: csrf_token } );
+
+  //Put the results in a div
+  posting.done(function( data ) {
+     var content = $( data ).find( "#comments" );
+     $( "#comments" ).empty().append( content );
+  });
+
+});
+    document.querySelector('#bisi').onsubmit = function()
+    {
+        if (!document.querySelector('#comment').value)
+        {
+            alert('comment is empty');
+            return false;
+        }
+        else if (!document.querySelector('#rate').value)
+        {
+            alert('rate is empty');
+            return false;
+        }
+    }
+    </script>
+{% endblock %}

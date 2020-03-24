@@ -1,0 +1,53 @@
+{% extends "booking/layout.html" %}
+
+{% block title %}
+    cart
+{% endblock %}
+
+{% block main %}
+{%if summ > 0 %}
+    <div class="container">
+            <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-8">
+  <p class="font2 add-para1">Cart</p>
+  <hr>
+  <table class="container">
+    <thead>
+        <tr>
+            <th><label for="sel1" class="font2 add-para2">order no.</label></th>
+            <th><label for="sel1" class="font2 add-para2">Room</label></th>
+            <th><label for="sel1" class="font2 add-para2">From</label></th>
+            <th><label for="sel1" class="font2 add-para2">To</label></th>
+            <th><label for="sel1" class="font2 add-para2">Days</label></th>
+            <th><label for="sel1" class="font2 add-para2">price</label></th>
+        </tr>
+    </thead>
+    {% for book in books %}
+        <tr class="para4 font1">
+          <th>{{ book.order_num }}</th>
+          <th>{{ book.unit_id }}</th>
+          <th>{{ book.from_date }}</th>
+          <th>{{ book.to_date }}</th>
+          <th>{{ book.num_of_days }}</th>
+          <th>{{ book.price_per_unit }}</th>
+          <th><a href ="{% url 'delete' book.id %}"><button type="submit" class="btn-md new-botton1 new-botton2">Delete</button></a></th>
+        </tr>
+    {% endfor %} 
+        <p class="font2 add-para1">Total price is {{ summ }}</p>
+    </table>
+    <br><br>
+    <div class="font1">
+          <form action="{% url 'cart' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn-md new-botton1 new-botton2"> confirm the order</button>
+          </form> 
+    </div>  
+    <br><br>
+</div>
+</div>
+</div>
+{% else%}
+<p class="font2 add-para1">you havnt book any room yet..</p>
+<br><br>
+{% endif %}
+{% endblock %}

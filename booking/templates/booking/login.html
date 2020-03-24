@@ -1,0 +1,30 @@
+{% extends "booking/layout.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block main %}
+<div class="container">
+            <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-8">
+  <p class="font2 add-para1">Login user</p>
+  <p> {{ message}}</p>
+  <form action="{% url 'login' %}" method="post">
+  {% csrf_token %}
+    <div class="form-group">
+      <label for="sel1" class="font2 add-para2">user name</label>
+      <input autocomplete="off" autofocus class="form-control font1" name="username" placeholder="Username" type="text" id="sel1">
+      <br>
+        <label for="sel1" class="font2 add-para2">password</label>
+      <input class="form-control font1" name="password" placeholder="Password" type="password" id="sel1">
+      <hr>
+      <div class="font1">
+          <button  type="submit" class="btn-md new-botton1 new-botton2"> Login</button>
+      </div>
+      </div>
+    </form>
+</div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "booking/layout.html" %}
+
+{% block title %}
+    Hotels
+{% endblock %}
+
+{% block main %}
+<section class="container">
+            <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <p class="para3 font2"> About Us</p>
+                        <p class="para4 font1"> By investing in technology that takes the friction out of travel, Hotel.com seamlessly connects millions of travelers to memorable experiences, a variety of transportation options, and incredible places to stay – from homes to hotels, and much more. As one of the world’s largest travel marketplaces for both established brands and entrepreneurs of all sizes, Hotel.com enables properties around the world to reach a global audience and grow their businesses. </p>
+                        <p class="para4 font1"> Hotel.com is available in 43 languages and offers more than 28 million reported accommodation listings, including over 6.2 million homes, apartments, and other unique places to stay. Wherever you want to go and whatever you want to do, Hotel.com makes it easy and supports you with 24/7 customer support. </p>
+                </div>
+            </div>
+</section>
+<section class="section1 well">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <p class="para1 text-center font2"> " A paradise in paradise "</p>
+                    <p class="para2 text-center font1"> a dreamy hotel on a magnificent island.</p>
+                </div>
+            </div>
+
+</section>
+
+<section class="container">
+{% for hotel in hotels %}
+            <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-6">
+                <img src={{ hotel.pic.url }} alt="" class="img-responsive image3 image-effect1">
+      <div class="well">
+                <p class="para5 font2"> {{ hotel.name }} </p>
+                <p class="para6 font1">{{ hotel.desc }}</p>
+          <hr>
+
+          <a href = "{% url 'hotel' hotel.id %}" > <button type="submit" class="btn-md new-botton1 new-botton2"> View Hotel</button></a>
+    </div>
+    </div>
+
+{% endfor %}
+</section>
+<br>
+{% endblock %}
